@@ -1,5 +1,4 @@
 {
-<<<<<<< Updated upstream
 	"folders": [
 		{
 			"path": "."
@@ -10,11 +9,4 @@
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	}
-=======
-    "folders": [
-        {
-            "path": "."
-        }
-    ]
->>>>>>> Stashed changes
 }
