@@ -3,9 +3,8 @@ import LiveLights from "components/LiveFloorplans/LiveLights";
 import LiveSensors from "components/LiveFloorplans/LiveSensors";
 import axios from "axios";
 import Skeleton from "@material-ui/lab/Skeleton";
-import { Button } from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import Power from "components/power/Dashboard";
-
 
 export default function Overwatch(props) {
   const [lights, setLights] = React.useState([]);
@@ -58,7 +57,7 @@ export default function Overwatch(props) {
       //route to lights of group id = this.state.rowId
       .post(
         global.BASE_URL + "/api/lights/assign/" + light.id,
-        { levels_id: props.clickedLevel },
+        {levels_id: props.clickedLevel},
         {
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
@@ -78,7 +77,7 @@ export default function Overwatch(props) {
       //route to lights of group id = this.state.rowId
       .post(
         global.BASE_URL + "/api/sensors/assign/" + sensor.id,
-        { levels_id: props.clickedLevel },
+        {levels_id: props.clickedLevel},
         {
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
@@ -103,22 +102,6 @@ export default function Overwatch(props) {
   }, []);
   return (
     <div>
-      <Button
-        color="primary"
-        variant="outlined"
-        style={{ display: "inline-block", margin: "5px" }}
-        onClick={() => setMode("EM")}
-      >
-        Em fittings
-      </Button>
-      <Button
-        color="primary"
-        variant="outlined"
-        style={{ display: "inline-block", margin: "5px" }}
-        onClick={() => setMode("SE")}
-      >
-        Sensors
-      </Button>
       {response ? (
         mode === "EM" ? (
           <LiveLights
@@ -127,17 +110,19 @@ export default function Overwatch(props) {
             liveDevices={lights}
             assignLight={assignLight}
             refreshData={callLightsFloorplans}
+            setMode={setMode}
           />
         ) : (
           <div>
-          <LiveSensors
-            clickedBuilding={props.clickedBuilding}
-            clickedLevel={props.clickedLevel}
-            liveDevices={sensors}
-            assignSensor={assignSensor}
-            refreshData={callSensorsFloorplans}
-          />
-          <Power onlyGraph/>
+            <LiveSensors
+              clickedBuilding={props.clickedBuilding}
+              clickedLevel={props.clickedLevel}
+              liveDevices={sensors}
+              assignSensor={assignSensor}
+              refreshData={callSensorsFloorplans}
+              setMode={setMode}
+            />
+            <Power onlyGraph />
           </div>
         )
       ) : (

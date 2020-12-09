@@ -1,26 +1,26 @@
 const con = require("../database/db_promise");
 const Promise = require("bluebird");
 
-const { insertMsg } = require("./MqttHelpers");
+const {insertMsg} = require("./MqttHelpers");
 const MqttDevice = require("./Clients/MqttDevice");
-const { device } = require("aws-iot-device-sdk");
+const {device} = require("aws-iot-device-sdk");
 
 const updateStatusQuery = `UPDATE lights SET status = ? WHERE id = ?`;
 
 const errorMessages = {
   "0CCD": "",
-  "6666": "No connection to driver",
+  6666: "No connection to driver",
   "7FFF": "Battery powered",
 };
 
 const testTime = {
-  "Annual": 10800000,
-  "Monthly": 180000,
+  Annual: 10800000,
+  Monthly: 180000,
 };
 
 const testCheckpointsTime = {
-  "Annual": new Set([9900000, 3600000, 300000]),
-  "Monthly": new Set([150000, 120000, 60000]),
+  Annual: new Set([9900000, 3600000, 300000]),
+  Monthly: new Set([150000, 120000, 60000]),
 };
 
 class LiveTestDevice {
@@ -94,7 +94,7 @@ class LiveTestDevice {
 
   setNoResponse() {
     this.powercut = 3;
-    this.addResult("Weak connection to mesh");
+    this.addResult("Not tested");
   }
 
   setTestFinished() {
@@ -214,7 +214,7 @@ class LiveTestDevice {
           }
         })
         .catch((err) => {
-          // this.addResult("Weak connection to mesh");
+          // this.addResult("Not tested");
           console.log("ERR", err);
           resolve("No response");
         });
@@ -381,7 +381,7 @@ const setFind = (set, cb) => {
 };
 
 const insertVoltLdrReading = (sensor_id, bat = "", ldr = "") => {
-  const data = { battery: bat, ldr: ldr, sensor_node_id: sensor_id };
+  const data = {battery: bat, ldr: ldr, sensor_node_id: sensor_id};
   con.query("INSERT INTO device_battery_ldr SET ?", data).catch((err) => {
     throw err;
   });

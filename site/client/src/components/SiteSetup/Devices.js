@@ -32,14 +32,19 @@ export default function buildings(props) {
       title: "Mesh Address",
     },
     {
-      field: "is_assigned",
-      title: "Assigned?",
+      field: "status",
+      title: "Status",
       editable: "never",
-      render: (rowData) => {
-        if (rowData.is_assigned === 0) return <span>No</span>;
-        else return <span>Yes</span>;
-      },
     },
+    // {
+    //   field: "is_assigned",
+    //   title: "Assigned?",
+    //   editable: "never",
+    //   render: (rowData) => {
+    //     if (rowData.is_assigned === 0) return <span>No</span>;
+    //     else return <span>Yes</span>;
+    //   },
+    // },
     {
       field: "building",
       title: "Luminance",
@@ -56,7 +61,7 @@ export default function buildings(props) {
         Authorization: "Bearer " + localStorage.usertoken,
       },
       url: global.BASE_URL + "/api/lights/addempty/5",
-      data: { level_id: props.clickedLevel },
+      data: {level_id: props.clickedLevel},
       timeout: 0,
     });
     return result;

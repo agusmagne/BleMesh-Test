@@ -13,7 +13,7 @@ export default function UnassignedDevices(props) {
 
   const callDevices = async () => {
     const data = await axios.get(
-      global.BASE_URL + "/api/lights/unassigned/" + props.clickedLevel,
+      global.BASE_URL + "/api/lights/level/unassigned/" + props.clickedLevel,
       {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -59,8 +59,8 @@ export default function UnassignedDevices(props) {
       title: "Mesh Address",
     },
     {
-      field: "is_assigned",
-      title: "Battery",
+      field: "status",
+      title: "Status",
       editable: "never",
     },
     {

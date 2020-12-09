@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import GridItem from "components/Grid/GridItem.js";
-import { Tabs, Tab, Fab, Icon, Typography } from "@material-ui/core";
+import {Tabs, Tab, Fab, Icon, Typography} from "@material-ui/core";
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit";
 import "bootstrap/dist/css/bootstrap.css";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Overwatch from "components/LiveEmStatus/Overwatch";
@@ -205,56 +205,10 @@ export default function LiveEmStatus() {
     },
   };
 
-  const expandRow = {
-    renderer: (row) => {
-      let data = [];
-      const levelColumns = [
-        {
-          dataField: "id",
-          text: "ID",
-          hidden: true,
-          sort: true,
-        },
-        {
-          dataField: "level",
-          text: "Level",
-          sort: true,
-        },
-        {
-          dataField: "devices",
-          text: "Luminaires",
-          sort: true,
-          editable: false,
-        },
-        {
-          dataField: "lights_count",
-          text: "Luminaires count",
-          sort: true,
-          editable: false,
-        },
-      ];
-      levels.forEach((el) => {
-        if (row.buildings_id === el.buildings_id) data.push(el);
-      });
-
-      return (
-        <div>
-          <BootstrapTable
-            keyField="id"
-            data={data}
-            rowEvents={rowEvents}
-            columns={levelColumns}
-            rowStyle={{ cursor: "pointer" }}
-          />
-        </div>
-      );
-    },
-  };
-
   return (
     <div>
       {clickedSite ? (
-        <GridItem xs={12} style={{ margin: "5px" }}>
+        <GridItem xs={12} style={{margin: "5px"}}>
           <Tabs
             value={clickedSite}
             onChange={handleChangeSite}
@@ -279,7 +233,7 @@ export default function LiveEmStatus() {
       ) : null}
       <GridItem
         xs={12}
-        style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "5px" }}
+        style={{marginTop: "20px", marginBottom: "20px", marginLeft: "5px"}}
       >
         <Fab
           disabled={backDisabled}
@@ -297,7 +251,7 @@ export default function LiveEmStatus() {
             // } else setBackDisabled(true);
           }}
         >
-          <Icon style={{ transform: "rotate(-90deg)" }}>navigation</Icon>
+          <Icon style={{transform: "rotate(-90deg)"}}>navigation</Icon>
         </Fab>
       </GridItem>
       {stage === 1 ? (
@@ -324,7 +278,7 @@ export default function LiveEmStatus() {
       ) : null}
       {stage === 3 && clickedLevel ? (
         <div>
-          <div style={{ margin: "15px" }}>
+          <div style={{margin: "15px"}}>
             <Overwatch
               clickedBuilding={clickedBuilding}
               clickedLevel={clickedLevel}

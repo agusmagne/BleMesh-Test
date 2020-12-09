@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { device } = require("../Mqtt/Clients/test");
+const {device} = require("../Mqtt/Clients/test");
 const auth = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 const con = require("../database/db2");
 var mqtt = require("mqtt");
 var schedule = require("node-schedule");
-const { on } = require("../database/db2");
+const {on} = require("../database/db2");
 const clonedeep = require("lodash.clonedeep");
 const nodemailer = require("nodemailer");
 
@@ -30,11 +30,11 @@ const relayBackOn = 360000;
 var devicesLive = [];
 const noResponseTimeout = 15000;
 // var usersTest;
-const QOS_1 = { qos: 1 };
+const QOS_1 = {qos: 1};
 
 const errorMessages = {
   "0CCD": "",
-  "6666": "No connection to driver",
+  6666: "No connection to driver",
   "7FFF": "Battery powered",
 };
 
@@ -56,7 +56,7 @@ const pubHandle = (cmd, deviceId, counter, messages, topic, user, testType) => {
           //if no response from device in X seconds, continue the loop
           console.log(`${deviceId}: NO RES`);
           usersDevices[counter].powercut = 3; //state 3 = no response
-          usersDevices[counter].result.add("Weak connection to mesh");
+          usersDevices[counter].result.add("Not tested");
           updateDeviceState(usersDevices[counter]);
 
           resolve("NO RES");
@@ -106,7 +106,7 @@ async function handleMessage() {
 }
 
 function insertVoltLdrReading(sensor_id, bat = "", ldr = "") {
-  const data = { battery: bat, ldr: ldr, sensor_node_id: sensor_id };
+  const data = {battery: bat, ldr: ldr, sensor_node_id: sensor_id};
   con.query("INSERT INTO device_battery_ldr SET ?", data, (err, results) => {
     if (err) throw err;
   });
@@ -172,7 +172,7 @@ async function checkDeviceState(counter, topic, deviceId, user, type) {
         var msgTimeout = setTimeout(() => {
           //if no response from device in X seconds, continue the loop
           usersDevices[counter].powercut = 3; //state 3 = no response
-          usersDevices[counter].result.add("Weak connection to mesh");
+          usersDevices[counter].result.add("Not tested");
           updateDeviceState(usersDevices[counter]);
           busy = false;
           resolve("No response");
@@ -235,7 +235,7 @@ async function checkDeviceConnectivity(topic, deviceData, type) {
         console.log("state check: " + deviceData.id);
 
         var msgTimeout = setTimeout(() => {
-          deviceData.result.add("Weak connection to Mesh");
+          deviceData.result.add("Not tested");
           updateDeviceState(deviceData);
           busy = false;
           resolve("No response");
@@ -321,7 +321,7 @@ durationCounterStart = (counter, topic, user, testType) => {
                           var msgTimeout = setTimeout(() => {
                             console.log("No response");
                             s.sensor_responded = false;
-                            testedDevice.result.add("Weak connection to mesh");
+                            testedDevice.result.add("Not tested");
                             updateDeviceState(testedDevice);
                           }, 6000);
                           device.handleMessage = (packet, callback) => {
@@ -389,9 +389,7 @@ durationCounterStart = (counter, topic, user, testType) => {
                             var msgTimeout = setTimeout(() => {
                               console.log("No response");
                               s.sensor_responded = false;
-                              testedDevice.result.add(
-                                "Weak connection to mesh"
-                              );
+                              testedDevice.result.add("Not tested");
                               updateDeviceState(testedDevice);
                             }, 6000);
                             device.handleMessage = (packet, callback) => {
@@ -462,9 +460,7 @@ durationCounterStart = (counter, topic, user, testType) => {
                     var msgTimeout = setTimeout(() => {
                       console.log(`${deviceId}: NO RES`);
                       usersDevices[counter].powercut = 3;
-                      usersDevices[counter].result.add(
-                        "Weak connection to mesh"
-                      );
+                      usersDevices[counter].result.add("Not tested");
                       updateDeviceState(usersDevices[counter]);
                       counter++;
                       busy = false;
@@ -720,9 +716,7 @@ router.post("/aborttest/:testid", auth, (req, res) => {
                     var msgTimeout = setTimeout(() => {
                       console.log("No response");
                       usersDevices[counter].powercut = 3;
-                      usersDevices[counter].result.add(
-                        "Weak connection to mesh"
-                      );
+                      usersDevices[counter].result.add("Not tested");
                       updateDeviceState(usersDevices[counter]);
                       counter++;
                       setTimeout(loop, 1000);
@@ -832,9 +826,7 @@ router.post("/savetest/:testid", auth, (req, res) => {
                     if (usersDevices.length > 0) {
                       console.log("No response");
                       usersDevices[counter].powercut = 3;
-                      usersDevices[counter].result.add(
-                        "Weak connection to mesh"
-                      );
+                      usersDevices[counter].result.add("Not tested");
                       updateDeviceState(usersDevices[counter]);
                     }
                     counter++;
@@ -1715,7 +1707,7 @@ router.post("/dev/manual/cmd", auth, (req, res) => {
       console.log(topic);
       device.publish(topic, req.body.command, QOS_1, (err) => {
         var msgTimeout = setTimeout(() => {
-          res.send({ message: `NO RES: ${req.body.command}` });
+          res.send({message: `NO RES: ${req.body.command}`});
         }, 6000);
         device.handleMessage = (packet, callback) => {
           var message = packet.payload.toString("utf8");
@@ -1751,7 +1743,7 @@ const setFind = (set, cb) => {
 };
 
 router.post("/manualset/", (req, res) => {
-  const { user, device, result } = req.body;
+  const {user, device, result} = req.body;
   const usersDevices = findUsersTest(user).devices;
   const index = usersDevices.findIndex((el) => el.id === device);
   usersDevices[index].result.add(result);
@@ -1875,19 +1867,19 @@ const event = schedule.scheduleJob("*/1 * * * *", () => {
   };
 });
 
-const checkGatewayState = (topic, faultyDevices=[]) => {
+const checkGatewayState = (topic, faultyDevices = []) => {
   var received = 0;
   device.publish(topic, `XchkX`, QOS_1, () => {
-    console.log("PUB CHECK")
+    console.log("PUB CHECK");
     const timeout = setTimeout(() => {
       received = -1;
-      console.log("NO RES")
+      console.log("NO RES");
       // actOnGatewayState(received, faultyDevices);
     }, 8000);
     device.handleMessage = (packet, callback) => {
       const message = packet.payload.toString("utf8");
       if (received === 0) {
-        console.log(message)
+        console.log(message);
         clearTimeout(timeout);
         received = 1;
         // actOnGatewayState(received, faultyDevices);
@@ -1898,7 +1890,7 @@ const checkGatewayState = (topic, faultyDevices=[]) => {
   });
 };
 
-checkGatewayState("DEVCOMSP")
+checkGatewayState("DEVCOMSP");
 
 const actOnGatewayState = (state, faultyDevices) => {
   var transporter = nodemailer.createTransport({
@@ -2032,7 +2024,7 @@ const beforeScheduledTest = async (test) => {
         const devices = rows;
         let counter = 0;
         devices.forEach((el) => {
-          const params = { trial_tests_id: result.insertId, lights_id: el.id };
+          const params = {trial_tests_id: result.insertId, lights_id: el.id};
           con.query(insertTrialLight, params, (err) => {
             if (err) throw err;
             console.log(3);
@@ -2115,7 +2107,7 @@ const saveScheduledTest = (user) => {
                 if (usersDevices.length > 0) {
                   console.log("No response");
                   usersDevices[counter].powercut = 3;
-                  usersDevices[counter].result.add("Weak connection to mesh");
+                  usersDevices[counter].result.add("Not tested");
                   updateDeviceState(usersDevices[counter]);
                 }
                 counter++;

@@ -3,7 +3,8 @@ const con = require("../database/db_promise");
 const LiveTestDevice = require("./LiveTestDevice");
 
 const updateTestResultsQuery = "UPDATE trial_tests SET result=? WHERE id=?";
-const updateDeviceResultsQuery = "update trial_tests_has_lights set result=? where trial_tests_id=? and lights_id=?";
+const updateDeviceResultsQuery =
+  "update trial_tests_has_lights set result=? where trial_tests_id=? and lights_id=?";
 
 class LiveTest {
   constructor(testId, userId, devicesCopy, testType, inProgress, siteId) {
@@ -52,7 +53,7 @@ class LiveTest {
           return d.cutPower(this.type);
         })
           .then((devices) => {
-            console.log(devices, "CUT ALL")
+            console.log(devices, "CUT ALL");
             resolve();
           })
           .catch((err) => {
@@ -64,10 +65,10 @@ class LiveTest {
       }
     });
 
-    return promise
-  };
+    return promise;
+  }
 
-  finish(state){
+  finish(state) {
     let promise = new Promise((resolve, reject) => {
       //TODO PROTECTION FOR CANCELLING AND FINISHING AND CUTPOWERALL
       if (state === "Cancelled") {
@@ -76,14 +77,11 @@ class LiveTest {
         this.finish_clicked = true;
       }
       let messages = new Set();
-      Promise.each(
-        this.devices,
-        async (d) => {
-          await sleep(1000);
-          console.log("ABORT DEVICE: " + d.nodeId);
-          return d.finishDevice(messages);
-        }
-      )
+      Promise.each(this.devices, async (d) => {
+        await sleep(1000);
+        console.log(": " + d.nodeId);
+        return d.finishDevice(messages);
+      })
         .then(() => {
           console.log("Finish done", state);
           this.updateTestResults(state)
@@ -93,12 +91,12 @@ class LiveTest {
         .catch((err) => reject(err));
     });
 
-    return promise
+    return promise;
     // const result = await promise;
     // return result;
-  };
+  }
 
-  updateTestResults(state){
+  updateTestResults(state) {
     let promise = new Promise((resolve, reject) => {
       con
         .query(updateTestResultsQuery, [state, this.testId])
@@ -115,20 +113,20 @@ class LiveTest {
         });
     });
 
-    return promise
+    return promise;
     // const result = await promise;
     // return result;
-  };
+  }
 
   /**
    *
    * @param {Number} id deviceId
    * @returns {LiveTestDevice} device
    */
-  getDeviceById(id){
+  getDeviceById(id) {
     const index = this.devices.findIndex((el) => el.deviceId === id);
     return this.devices[index];
-  };
+  }
 }
 
 async function sleep(ms) {

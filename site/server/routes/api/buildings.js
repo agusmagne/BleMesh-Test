@@ -8,7 +8,7 @@ const {values} = require("lodash");
 const selectBuildings = "SELECT * FROM buildings";
 const selectSite = `SELECT s.id as sites_id, b.building, b.id as buildings_id,
                     b.address, l.id AS levels_id, l.level, 
-                    count(lg.id) as devices,
+                    count(lg.id) as devices
                     FROM sites s 
                     LEFT JOIN buildings b on s.id = b.sites_id 
                     LEFT JOIN levels l on l.buildings_id = b.id 
@@ -44,7 +44,7 @@ router.get("/", auth, (req, res) => {
   });
 });
 
-//get building by param: id
+//get building by param id
 router.get("/:sites_id", auth, (req, res) => {
   con.query(selectSite, req.params.sites_id, (err, rows) => {
     if (err) res.sendStatus(400);

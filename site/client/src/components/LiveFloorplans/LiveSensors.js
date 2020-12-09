@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import Draggable from "react-draggable";
 import axios from "axios";
@@ -24,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   "@keyframes blinker": {
-    "0%": { opacity: "0.2" },
-    "20%": { opacity: "0.5" },
-    "50%": { opacity: "1" },
-    "80%": { opacity: "0.5" },
-    "100%": { opacity: "0.2" },
+    "0%": {opacity: "0.2"},
+    "20%": {opacity: "0.5"},
+    "50%": {opacity: "1"},
+    "80%": {opacity: "0.5"},
+    "100%": {opacity: "0.2"},
   },
   blink: {
     color: "#3F51B5",
@@ -142,7 +142,7 @@ export default function LiveFloorPlan(props) {
   };
 
   useEffect(() => {
-    const { devices } = props;
+    const {devices} = props;
     setDevices(devices);
     axios
       .get(global.BASE_URL + "/api/levels/floorplan/" + props.clickedLevel, {
@@ -170,7 +170,7 @@ export default function LiveFloorPlan(props) {
         Authorization: "Bearer " + localStorage.usertoken,
       },
       url: global.BASE_URL + "/api/sensors/edit-position",
-      data: { devices: devices },
+      data: {devices: devices},
     }).then((res) => {
       console.log(res);
       if (res.status === 200) {
@@ -180,7 +180,7 @@ export default function LiveFloorPlan(props) {
   };
 
   const handleDrag = (e, ui, index, id) => {
-    let { liveDevices } = props;
+    let {liveDevices} = props;
     console.log(liveDevices);
     liveDevices[index].fp_coordinates_bot =
       liveDevices[index].fp_coordinates_bot + ui.deltaY;
@@ -232,16 +232,40 @@ export default function LiveFloorPlan(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  const dragHandlers = { onStart: onStart, onStop: onStop };
+  const dragHandlers = {onStart: onStart, onStop: onStop};
 
   const liveDevices_ = props.liveDevices;
 
   return (
     <div>
+      <Button
+        color="primary"
+        variant="outlined"
+        style={{display: "inline-block", margin: "5px"}}
+        onClick={() => props.setMode("EM")}
+      >
+        Em fittings
+      </Button>
+      <Button
+        color="primary"
+        variant="outlined"
+        style={{display: "inline-block", margin: "5px"}}
+        onClick={() => props.setMode("SE")}
+      >
+        Sensors
+      </Button>
+      <Button
+        color="primary"
+        variant="outlined"
+        style={{float: "right"}}
+        onClick={handleSavePositions}
+      >
+        save device positions
+      </Button>
       <div className={classes.card}>
-        <Typography variant="h4" style={{ marginTop: "5px" }}>
+        <Typography variant="h4" style={{marginTop: "5px"}}>
           Sensors: {liveDevices_.length > 1 ? liveDevices_.length : 0}
-          <p style={{ float: "right" }}></p>
+          <p style={{float: "right"}}></p>
         </Typography>
       </div>
       <div
@@ -263,7 +287,7 @@ export default function LiveFloorPlan(props) {
           }}
           alt="Third Level"
         >
-          <div style={{ width: "100%", height: "100%", position: "relative" }}>
+          <div style={{width: "100%", height: "100%", position: "relative"}}>
             {liveDevices_.length > 0 ? (
               !floorplanNotFound ? (
                 <div></div>
@@ -384,7 +408,7 @@ export default function LiveFloorPlan(props) {
                             id={id}
                             open={openedPopoverId === el.id}
                             anchorEl={anchorEl}
-                            style={{ pointerEvents: "none" }} //important
+                            style={{pointerEvents: "none"}} //important
                             anchorOrigin={{
                               vertical: "bottom",
                               horizontal: "center",
@@ -422,9 +446,7 @@ export default function LiveFloorPlan(props) {
           </div>
         </div>
       </div>
-      <Button color="primary" onClick={handleSavePositions}>
-        save device positions
-      </Button>
+
       {success ? <h5>Device positions saved.</h5> : null}
 
       <UnassignedSensors

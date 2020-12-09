@@ -83,7 +83,7 @@ const generateReport = (rows, res, userinput, reportType = "official") => {
     OK: 0,
     "Lamp Fault": 0,
     "Battery Fault": 0,
-    "Weak connection to mesh": 0,
+    "Not tested": 0,
   };
   console.log(userinput);
   data_.forEach((el) => {
@@ -95,7 +95,7 @@ const generateReport = (rows, res, userinput, reportType = "official") => {
   const responsesData = {
     lampFault: faults["Lamp Fault"],
     battFault: faults["Battery Fault"],
-    noConnection: faults["Weak connection to mesh"],
+    noConnection: faults["Not tested"],
     noFault: faults["OK"],
   };
 

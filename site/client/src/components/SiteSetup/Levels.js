@@ -26,7 +26,12 @@ export default function Levels(props) {
       title: "Luminaires",
       sort: true,
       editable: "never",
+      render: (rowData) =>
+        rowData.devices.length ? (
+          <span>{rowData.devices.slice(0, 60)}...</span>
+        ) : null,
     },
+
     {
       field: "lights_count",
       title: "Luminaires count",

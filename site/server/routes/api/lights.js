@@ -21,7 +21,7 @@ const getUserLights = `
   LEFT JOIN sites s ON s.id = b.sites_id
   LEFT JOIN users_has_sites uhs ON uhs.sites_id = s.id
   LEFT JOIN users u ON u.id = uhs.users_id
-  WHERE l.id = ? AND lg.is_assigned = ?`;
+  WHERE u.id = ? AND lg.is_assigned = ?`;
 
 const getBuildingLights = `
   SELECT DISTINCT lg.id as lights_id, lg.node_id, lg.device_id, lg.type,
@@ -46,7 +46,7 @@ const getLevelLights = `
   LEFT JOIN sites s ON s.id = b.sites_id
   LEFT JOIN users_has_sites uhs ON uhs.sites_id = s.id
   LEFT JOIN users u ON u.id = uhs.users_id
-  WHERE l.id = ? AND lg.is_assigned = 1`;
+  WHERE l.id = ? AND lg.is_assigned = ?`;
 const getLevelLightsAll = `
   SELECT DISTINCT lg.*, l.id as levels_id, l.level, b.building, 
   b.id as buildings_id, s.mqtt_topic_out, s.mqtt_topic_in, s.id as sites_id,
@@ -75,6 +75,7 @@ const getColumns = "SHOW COLUMNS FROM lights";
 router.get("/:uid", auth, (req, res) => {
   con.query(getUserLights, [req.params.uid, 1], (err, rows) => {
     if (err) res.sendStatus(400);
+    console.log(rows);
     res.json(rows);
   });
 });
@@ -96,7 +97,14 @@ router.get("/building/:buildings_id", auth, (req, res) => {
 });
 
 router.get("/level/:level_id", auth, (req, res) => {
-  con.query(getLevelLights, req.params.level_id, (err, rows) => {
+  con.query(getLevelLights, [req.params.level_id, 1], (err, rows) => {
+    if (err) res.sendStatus(400);
+    res.json(rows);
+  });
+});
+
+router.get("/level/unassigned/:level_id", auth, (req, res) => {
+  con.query(getLevelLights, [req.params.level_id, 0], (err, rows) => {
     if (err) res.sendStatus(400);
     res.json(rows);
   });

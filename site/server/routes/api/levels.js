@@ -42,7 +42,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "public/img"),
   filename: (req, file, cb) => cb(null, `floorplan${req.body.level}.jpg`),
 });
-const upload = multer({ storage: storage }).single("file");
+const upload = multer({storage: storage}).single("file");
 const floorplansDir = path.join(__dirname, "../../public/img");
 
 router.get("/", auth, (req, res) => {

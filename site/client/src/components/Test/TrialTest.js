@@ -370,7 +370,7 @@ class TrialTest extends Component {
         },
         formatter: (cellContent, row) => {
           if (
-            row.result.includes("Battery Fault") ||
+            row.result.includes("Battery fault") ||
             row.result.includes("Battery disconnected")
           ) {
             return <span>Faulty</span>;
@@ -657,7 +657,7 @@ class TrialTest extends Component {
         //data object sent in request's body
         device: device,
         user: user,
-        site: this.state.clickedSite
+        site: this.state.clickedSite,
       },
       timeout: 0,
     })
@@ -752,7 +752,10 @@ class TrialTest extends Component {
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: "Bearer " + localStorage.usertoken,
       },
-      url: global.BASE_URL + "/mqtt/savetest/" + `${user}/${this.state.clickedSite}`,
+      url:
+        global.BASE_URL +
+        "/mqtt/savetest/" +
+        `${user}/${this.state.clickedSite}`,
       timeout: 0,
     })
       .then((res) => {
@@ -802,7 +805,10 @@ class TrialTest extends Component {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: "Bearer " + localStorage.usertoken,
         },
-        url: global.BASE_URL + "/mqtt/aborttest/" + `${user}/${this.state.clickedSite}`,
+        url:
+          global.BASE_URL +
+          "/mqtt/aborttest/" +
+          `${user}/${this.state.clickedSite}`,
         timeout: 0,
         data: {user: user, topic: this.state.liveDevices[0].mqtt_topic},
       })
@@ -1205,9 +1211,6 @@ class TrialTest extends Component {
         {this.state.step === 2 ? (
           <div>
             <Typography variant="h4" gutterBottom>
-              {/* {this.state.errorMessage} */}
-            </Typography>
-            <Typography variant="h4" gutterBottom>
               Devices selected
             </Typography>
             <BootstrapTable
@@ -1232,9 +1235,6 @@ class TrialTest extends Component {
         {/* step 3 - live devices and interface to start the test */}
         {this.state.step === 3 ? (
           <div>
-            <Typography variant="h4" gutterBottom>
-              {this.state.message}
-            </Typography>
             <div style={{float: "right"}}>
               <Button
                 // disabled={this.state.disabledStartAll}
@@ -1243,11 +1243,7 @@ class TrialTest extends Component {
               >
                 Start EM test
               </Button>
-              <Button
-                color="primary"
-                disabled={false}
-                onClick={this.saveTest}
-              >
+              <Button color="primary" disabled={false} onClick={this.saveTest}>
                 finish & save
               </Button>
               <Button
@@ -1303,9 +1299,6 @@ class TrialTest extends Component {
         ) : null}
         {this.state.step === 4 ? (
           <div>
-            <Typography variant="h4" gutterBottom>
-              {this.state.message}
-            </Typography>
             <TrialTestsTable
               justFinishedTest={true}
               lastTest={this.state.testid}

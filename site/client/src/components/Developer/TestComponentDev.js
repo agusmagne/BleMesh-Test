@@ -532,6 +532,7 @@ class TrialTest extends Component {
       },
       url: global.BASE_URL + "/api/lights/" + user,
     }).then((res) => {
+      console.log(res);
       this.setState({devices: res.data});
     });
     this.callSites();
@@ -1667,9 +1668,6 @@ class TrialTest extends Component {
         {this.state.step === 2 ? (
           <div>
             <Typography variant="h4" gutterBottom>
-              {this.state.errorMessage}
-            </Typography>
-            <Typography variant="h4" gutterBottom>
               Devices selected
             </Typography>
             <BootstrapTable
@@ -1694,13 +1692,6 @@ class TrialTest extends Component {
         {/* step 3 - live devices and interface to start the test */}
         {this.state.step === 3 ? (
           <div>
-            <Typography variant="h4" gutterBottom>
-              {this.state.message}
-            </Typography>
-            <Typography variant="h4" gutterBottom>
-              {this.state.errorMessage}
-            </Typography>
-
             <div style={{float: "right"}}>
               <Button
                 disabled={this.state.disabledStartAll}
@@ -1763,9 +1754,6 @@ class TrialTest extends Component {
         ) : null}
         {this.state.step === 4 ? (
           <div>
-            <Typography variant="h4" gutterBottom>
-              {this.state.message}
-            </Typography>
             <TrialTestsTable
               justFinishedTest={true}
               lastTest={this.state.testid}
