@@ -27,7 +27,7 @@ function NoDataIndication() {
   );
 }
 
-export default function LiveEmStatus() {
+export default function LiveEmStatus(props) {
   const [sites, setSites] = React.useState([]);
   const [buildings, setBuildings] = React.useState([]);
   const [levels, setLevels] = React.useState([]);
@@ -102,12 +102,14 @@ export default function LiveEmStatus() {
 
   const handleClickLevel = (event, rowData) => {
     console.log("handleClickLevel");
-    const index = levels.indexOf(rowData);
-    const row = levels[index];
+    console.log(rowData);
+
+    const index = levels.indexOf((el) => el.id === rowData.id);
+    const row = rowData.id;
     setStage(3);
     setDevices([]);
-    setClickedLevel(row.id);
-    callDevices(row.id).then((res) => {
+    setClickedLevel(row);
+    callDevices(row).then((res) => {
       console.log(res);
       setDevices(res.data);
       setBackDisabled(false);
@@ -185,6 +187,11 @@ export default function LiveEmStatus() {
 
   useEffect(() => {
     callSites();
+    if (props.historyState) {
+      console.log(props.historyState);
+      const rowData = {id: props.historyState.item.levels_id};
+      handleClickLevel(null, rowData);
+    }
     // eslint-disable-next-line
   }, []);
 

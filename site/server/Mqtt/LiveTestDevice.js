@@ -83,7 +83,12 @@ class LiveTestDevice {
    *
    */
   addSensors(sensorsList) {
-    if (sensorsList.length > 0) {
+    console.log("SENSORS", sensorsList);
+    const hasLdrVbat =
+      sensorsList.some((el) => el.type === "VBAT") &&
+      sensorsList.some((el) => el.type === "LDR");
+
+    if (hasLdrVbat) {
       this.hasSensors = true;
       this.sensors = sensorsList.map((r) => ({
         sensorId: r.node_id,
@@ -95,6 +100,7 @@ class LiveTestDevice {
   setNoResponse() {
     this.powercut = 3;
     this.addResult("Not tested");
+    this.updateDeviceState();
   }
 
   setTestFinished() {
@@ -277,7 +283,7 @@ class LiveTestDevice {
       else {
         onOff = "EM Lamp OFF";
         if (firstCheckpoint) {
-          this.addResult("Lamp Fault");
+          this.addResult("Lamp fault");
         }
         // this.addResult("Battery Fault"); //TODO ???
       }

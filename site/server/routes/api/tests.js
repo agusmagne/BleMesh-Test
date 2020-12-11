@@ -15,7 +15,7 @@ const getLightResponsesForCsv = `SELECT GROUP_CONCAT(lg.device_id, ' - ', lg.typ
                                     WHERE trial_tests_id = ?
                                     GROUP BY trial_tests_id , tthl.lights_id`;
 
-const getLightResponses = `SELECT tthl.*, lg.id, lg.node_id, lg.device_id, lg.type, l.level, b.building as building
+const getLightResponses = `SELECT tthl.*, lg.id, lg.node_id, lg.device_id, lg.type, l.level, lg.levels_id, b.building as building
                           FROM trial_tests_has_lights tthl
                           LEFT JOIN lights lg ON lg.id = tthl.lights_id
                           LEFT JOIN levels l ON l.id = lg.levels_id 
@@ -79,6 +79,7 @@ router.get("/usr/:id", auth, (req, res) => {
   const params = [parseInt(req.params.id), resultLimit];
   con.query(getLightResponsesByUserId, params, (err, rows) => {
     if (err) console.log(err);
+    rows[0].first = true;
     res.json(rows);
   });
 });

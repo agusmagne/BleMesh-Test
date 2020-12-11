@@ -9,6 +9,7 @@ import Fade from "@material-ui/core/Fade";
 import axios from "axios";
 import {Checkbox, Icon} from "@material-ui/core";
 import FillPDF from "components/Popup/FillPDF";
+import {withRouter} from "react-router-dom";
 
 class Popup extends React.Component {
   state = {
@@ -49,17 +50,23 @@ class Popup extends React.Component {
     const csvReportArray = this.props.errorsCsv;
     const tests = this.props.testsFiltered[0];
     const errors = this.props.errorsFiltered;
+    let linkDisabled = true;
+
     let errorsArr = [];
     let errorsStr = "";
     if (tests && errors) {
+      if (typeof tests.first !== "undefined") linkDisabled = false;
+      console.log(tests.first);
+
       let successColor = "green";
       let successful = 0;
       errors.forEach((el) => {
         if (el.result === "OK") successful++;
-        if (!el.result.includes("OK")) {
-          const err = `${el.device_id} - ${el.type}: ${el.result}`;
-          errorsArr.push(err);
-        }
+        if (el.result)
+          if (!el.result.includes("OK")) {
+            const err = `${el.device_id} - ${el.type}: ${el.result}`;
+            errorsArr.push(err);
+          }
       });
       errorsStr = errorsArr.join(", ");
 
@@ -115,13 +122,15 @@ class Popup extends React.Component {
                       return (
                         <tr key={index} style={{backgroundColor: color}}>
                           <td>
-                            {!item.result.includes("OK") ? (
-                              <Icon style={{color: "#FF786A"}}>cancel</Icon>
-                            ) : (
-                              <Icon style={{color: "#92d737"}}>
-                                check_circle
-                              </Icon>
-                            )}
+                            {item.result ? (
+                              !item.result.includes("OK") ? (
+                                <Icon style={{color: "#FF786A"}}>cancel</Icon>
+                              ) : (
+                                <Icon style={{color: "#92d737"}}>
+                                  check_circle
+                                </Icon>
+                              )
+                            ) : null}
                           </td>
                           <td
                             style={{
@@ -145,7 +154,22 @@ class Popup extends React.Component {
                               fontSize: "1.3em",
                             }}
                           >
-                            {`${item.building} - level ${item.level}`}
+                            {!linkDisabled ? (
+                              <a
+                                style={{cursor: "pointer"}}
+                                href={null}
+                                onClick={() =>
+                                  this.props.history.push({
+                                    pathname: "/admin/live-em-status",
+                                    state: {fromReport: true, item: item},
+                                  })
+                                }
+                              >{`${item.building} - level ${item.level}`}</a>
+                            ) : (
+                              <a
+                                href={null}
+                              >{`${item.building} - level ${item.level}`}</a>
+                            )}
                           </td>
                           <td
                             style={{
@@ -224,4 +248,4 @@ class Popup extends React.Component {
   }
 }
 
-export default Popup;
+export default withRouter(Popup);

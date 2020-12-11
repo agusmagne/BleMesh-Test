@@ -62,6 +62,7 @@ class TrialTestsTable extends Component {
   }
 
   filterTests = (rowId) => {
+    console.log(this.props.tests);
     axios
       .get(global.BASE_URL + "/api/trialtests/lightsresponses/csv/" + rowId, {
         headers: {

@@ -376,6 +376,9 @@ class TrialTest extends Component {
             return <span>Faulty</span>;
           } else if (row.powercut !== 3 && row.powercut > 0)
             return <span>OK</span>;
+          else if (!row.hasSensors) return <Button color="primary">set</Button>;
+          else if (row.hasSensors)
+            return <span style={{color: "green"}}>Automatic</span>;
           else return null;
         },
       },
@@ -399,10 +402,13 @@ class TrialTest extends Component {
           ],
         },
         formatter: (cellContent, row) => {
-          if (row.result.includes("Lamp Fault")) {
+          if (row.result.includes("Lamp fault")) {
             return <span>Faulty</span>;
           } else if (row.powercut !== 3 && row.powercut > 0)
             return <span>OK</span>;
+          else if (!row.hasSensors) return <Button color="primary">set</Button>;
+          else if (row.hasSensors)
+            return <span style={{color: "green"}}>Automatic</span>;
           else return null;
         },
       },
@@ -411,10 +417,7 @@ class TrialTest extends Component {
         text: "Bluetooth mesh",
         editable: false,
         formatter: (cellContent, row) => {
-          const result = row.result.length
-            ? Array.from(row.result).join(",")
-            : "";
-          return result.includes("mesh") ? (
+          return row.result.includes("Not tested") ? (
             <span>Connection problem</span>
           ) : (
             <span>OK</span>
@@ -590,7 +593,7 @@ class TrialTest extends Component {
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: "Bearer " + localStorage.usertoken,
       },
-      url: global.BASE_URL + "/api/lights/" + user,
+      url: global.BASE_URL + "/api/lights/all/" + user,
     }).then((res) => {
       this.setState({devices: res.data}, () => this.callSites());
     });
@@ -721,6 +724,7 @@ class TrialTest extends Component {
         result: input,
         user: user,
         device: deviceId,
+        site: this.state.clickedSite,
       },
     })
       .then((res) => {
@@ -1285,7 +1289,7 @@ class TrialTest extends Component {
             >
               <MenuItem value={"OK"}>Set 'Battery OK'</MenuItem>
               <MenuItem value={"OK"}>Set 'Lamp OK'</MenuItem>
-              <MenuItem value={"Lamp Fault"}>Set 'Lamp fault'</MenuItem>
+              <MenuItem value={"Lamp fault"}>Set 'Lamp fault'</MenuItem>
               <MenuItem value={"Battery Fault"}>Set 'Battery fault'</MenuItem>
             </Select>
             <Button

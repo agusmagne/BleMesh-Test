@@ -81,7 +81,7 @@ const generateReport = (rows, res, userinput, reportType = "official") => {
   let data_ = rows;
   let faults = {
     OK: 0,
-    "Lamp Fault": 0,
+    "Lamp fault": 0,
     "Battery Fault": 0,
     "Not tested": 0,
   };
@@ -93,7 +93,7 @@ const generateReport = (rows, res, userinput, reportType = "official") => {
   });
 
   const responsesData = {
-    lampFault: faults["Lamp Fault"],
+    lampFault: faults["Lamp fault"],
     battFault: faults["Battery Fault"],
     noConnection: faults["Not tested"],
     noFault: faults["OK"],

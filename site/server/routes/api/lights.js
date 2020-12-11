@@ -23,6 +23,18 @@ const getUserLights = `
   LEFT JOIN users u ON u.id = uhs.users_id
   WHERE u.id = ? AND lg.is_assigned = ?`;
 
+const getUserLightsAll = `
+  SELECT lg.*, l.id as levels_id, l.level, b.building, b.id as buildings_id,
+  s.mqtt_topic_out, s.mqtt_topic_in,s.id as sites_id,
+  s.name as sites_name
+  FROM lights lg
+  LEFT JOIN levels l ON l.id = lg.levels_id
+  LEFT JOIN buildings b ON b.id = l.buildings_id
+  LEFT JOIN sites s ON s.id = b.sites_id
+  LEFT JOIN users_has_sites uhs ON uhs.sites_id = s.id
+  LEFT JOIN users u ON u.id = uhs.users_id
+  WHERE u.id = ?`;
+
 const getBuildingLights = `
   SELECT DISTINCT lg.id as lights_id, lg.node_id, lg.device_id, lg.type,
   lg.status, l.id as levels_id, l.level, b.building, b.id as buildings_id,
@@ -75,7 +87,13 @@ const getColumns = "SHOW COLUMNS FROM lights";
 router.get("/:uid", auth, (req, res) => {
   con.query(getUserLights, [req.params.uid, 1], (err, rows) => {
     if (err) res.sendStatus(400);
-    console.log(rows);
+    res.json(rows);
+  });
+});
+
+router.get("/all/:uid", auth, (req, res) => {
+  con.query(getUserLightsAll, [req.params.uid], (err, rows) => {
+    if (err) res.sendStatus(400);
     res.json(rows);
   });
 });
@@ -152,7 +170,6 @@ router.post("/addempty/:amount", auth, function (req, res) {
   for (let i = 0; i < amount; i++) {
     params.push(levelId);
   }
-  console.log(params);
   con.query(createEmptyLights, params, (err) => {
     if (err) console.log(err);
     else res.sendStatus(200);
@@ -160,8 +177,7 @@ router.post("/addempty/:amount", auth, function (req, res) {
 });
 
 router.all("/edit/pos", auth, function (req, res) {
-  console.log("edit position");
-  console.log(req.body);
+  const devices = req.body.devices;
   const paramsList = req.body.devices.map((el) => [
     el.fp_coordinates_left,
     el.fp_coordinates_bot,
@@ -240,7 +256,6 @@ router.delete("/:id", auth, (req, res) => {
 
 router.get("/lastid", auth, (req, res) => {
   con.query(getLastLightId, (err, rows) => {
-    console.log(rows);
     res.json(rows[0]);
   });
 });

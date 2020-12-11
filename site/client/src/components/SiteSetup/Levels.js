@@ -27,8 +27,10 @@ export default function Levels(props) {
       sort: true,
       editable: "never",
       render: (rowData) =>
-        rowData.devices.length ? (
-          <span>{rowData.devices.slice(0, 60)}...</span>
+        rowData.devices ? (
+          rowData.devices.length > 0 ? (
+            <span>{rowData.devices.slice(0, 60)}...</span>
+          ) : null
         ) : null,
     },
 

@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { createBrowserHistory } from "history";
+import {createBrowserHistory} from "history";
 // import {createBrowserHistory} from "history";
-import { Route, Switch, Redirect, Router } from "react-router-dom";
+import {Route, Switch, Redirect, Router} from "react-router-dom";
 // import { Router } from "react-router-dom";
 // import { useHistory } from "react-router";
 import PropTypes from "prop-types";
@@ -35,7 +35,7 @@ const checkAuth = () => {
   }
 
   try {
-    const { exp } = decode(token);
+    const {exp} = decode(token);
 
     // console.log(dToken);
     // console.log(exp);
@@ -72,7 +72,7 @@ const CheckAuthInterval = () => {
   return null;
 };
 
-const AuthRoute = ({ component: Component, ...rest }) => (
+const AuthRoute = ({component: Component, ...rest}) => (
   <Route
     {...rest}
     render={(props) =>
@@ -83,7 +83,7 @@ const AuthRoute = ({ component: Component, ...rest }) => (
         </div>
       ) : (
         <div>
-          <Redirect to={{ exact: "/#/login" }} />
+          <Redirect to={{exact: "/#/login"}} />
           <p>Session Expired</p>
         </div>
       )

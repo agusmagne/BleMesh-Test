@@ -7,7 +7,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import LiveEmStatus from "components/LiveEmStatus/LiveEmStatus";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 
 const styles = {
   cardCategoryWhite: {
@@ -51,9 +51,9 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function Reports() {
+export default function Reports(props) {
   const classes = useStyles();
-
+  console.log(props);
   return (
     <div>
       <GridContainer justify="center">
@@ -63,7 +63,7 @@ export default function Reports() {
               <h4 className={classes.cardTitleWhite}>Live EM Status</h4>
             </CardHeader>
             <CardBody>
-              <LiveEmStatus />
+              <LiveEmStatus historyState={props.history.location.state} />
             </CardBody>
           </Card>
         </GridItem>

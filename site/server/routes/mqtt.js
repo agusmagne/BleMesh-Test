@@ -411,7 +411,7 @@ durationCounterStart = (counter, topic, user, testType) => {
                                   testedDevice.duration ===
                                   testCheckpointsTime[testType][0]
                                 ) {
-                                  testedDevice.result.add("Lamp Fault");
+                                  testedDevice.result.add("Lamp fault");
                                 }
                                 testedDevice.result.add("Battery Fault");
                               }

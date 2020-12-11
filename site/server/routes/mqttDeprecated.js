@@ -259,7 +259,7 @@ errorCheck = (requestData) => {
             }
             if (element.includes("7332")) {
               con.query("INSERT INTO errors SET ?", {
-                error: "Lamp Fault",
+                error: "Lamp fault",
                 device: item.id,
                 test_id: test_id,
               });
