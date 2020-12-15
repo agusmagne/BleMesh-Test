@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import MaterialTable from "material-table";
+import {withRouter} from "react-router-dom";
 import CSVReader from "react-csv-reader";
 import axios from "axios";
 import Select from "react-select";
 import {Typography, Button} from "@material-ui/core";
 
-export default function UploadCSV(props) {
+function UploadCSV(props) {
   const [rendered, setRendered] = useState(false);
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
@@ -80,15 +81,15 @@ export default function UploadCSV(props) {
     return mapping;
   };
 
-  const renameKeys = (keysMap, obj) => {
-    Object.keys(obj).reduce(
-      (acc, key) => ({
-        ...acc,
-        ...{[keysMap[key] || key]: obj[key]},
-      }),
-      {}
-    );
-  };
+  // const renameKeys = (keysMap, obj) => {
+  //   Object.keys(obj).reduce(
+  //     (acc, key) => ({
+  //       ...acc,
+  //       ...{[keysMap[key] || key]: obj[key]},
+  //     }),
+  //     {}
+  //   );
+  // };
 
   const getColumns = () => {
     const notRequiredCols = [
@@ -116,7 +117,6 @@ export default function UploadCSV(props) {
         .map((el) => {
           let required = !notRequiredCols.some((n) => el.Field === n);
           if (required) return {[el.Field]: ""};
-          console.log({[el.Field]: ""});
         })
         .filter(notUndefined);
       data.push({level_name: ""});
@@ -164,7 +164,7 @@ export default function UploadCSV(props) {
     );
   };
 
-  const prepareCsvForInsert = () => {
+  const importData = () => {
     let mappingObj = {};
     mapping.forEach((el) => {
       Object.assign(mappingObj, el);
@@ -184,6 +184,10 @@ export default function UploadCSV(props) {
       },
       data: data,
     }).then((res) => {
+      props.history.push({
+        pathname: "/admin/em-test-reports",
+        state: {fromDashboard: true},
+      });
       console.log(res);
     });
   };
@@ -204,7 +208,7 @@ export default function UploadCSV(props) {
               style={{
                 width: "100%",
                 display: "flex",
-                backgroundColor: "#00A957",
+                backgroundColor: "#5AB25E",
                 borderRadius: "4px",
                 padding: "10px",
                 marginBottom: "20px",
@@ -234,15 +238,16 @@ export default function UploadCSV(props) {
               </div>
             </div>
             {mapping.map((el, index) => {
-              const objectKey = Object.keys(el)[0];
+              let objectKey = Object.keys(el)[0];
               console.log(objectKey);
+              objectKey = objectKey === "level_name" ? "level" : objectKey;
               return (
                 <li
                   style={{
                     listStyle: "none",
                     width: "100%",
                     display: "flex",
-                    backgroundColor: "#00A957",
+                    backgroundColor: "#5AB25E",
                     borderRadius: "4px",
                     padding: "10px",
                     marginBottom: "20px",
@@ -275,17 +280,19 @@ export default function UploadCSV(props) {
           <Button
             variant="contained"
             color="primary"
-            onClick={prepareCsvForInsert}
+            onClick={importData}
             style={{float: "right"}}
           >
             IMPORT
           </Button>
         </div>
       ) : (
-        <Typography variant="h6">Select CSV file you wish to import</Typography>
+        <Typography variant="h6">Select CSV file to import</Typography>
       )}
 
       <CSVReader onFileLoaded={onFileLoaded} />
     </div>
   );
 }
+
+export default withRouter(UploadCSV);

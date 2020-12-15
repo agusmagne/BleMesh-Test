@@ -56,6 +56,7 @@ router.get("/:sites_id", auth, (req, res) => {
 //get building by param: id
 router.get("/joinlevels/:sites_id", auth, (req, res) => {
   con.query(selectSiteJoinLevels, req.params.sites_id, (err, rows) => {
+    rows = rows.filter((row) => row.buildings_id !== null);
     if (err) res.sendStatus(400);
     res.json(rows);
   });
@@ -109,8 +110,8 @@ router.post("/:id", auth, function (req, res) {
 // Delete chosen building
 router.delete("/:id", auth, function (req, res) {
   con.query(deleteBuilding, [req.params.id], (err, result) => {
-    if (err) res.sendStatus(400);
-    res.sendStatus(200);
+    if (err) console.log(err);
+    else res.sendStatus(200);
   });
 });
 

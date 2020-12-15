@@ -7,13 +7,9 @@ import MaterialTable from "material-table";
 export default function UnassignedDevices(props) {
   const [devices, setDevices] = React.useState([]);
 
-  const token = localStorage.usertoken;
-  const decoded = jwt_decode(token);
-  const user = decoded.id;
-
   const callDevices = async () => {
     const data = await axios.get(
-      global.BASE_URL + "/api/sensors/unassigned/" + user,
+      global.BASE_URL + "/api/sensors/level/all/" + props.clickedLevel,
       {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -56,9 +52,13 @@ export default function UnassignedDevices(props) {
       editable: "never",
     },
     {
-      field: "building",
-      title: "Luminance",
+      field: "sensor_is_assigned",
+      title: "Assigned?",
       editable: "never",
+      render: (rowData) => {
+        if (rowData.is_assigned === 0) return <span>No</span>;
+        else return <span>Yes</span>;
+      },
     },
   ];
 
@@ -72,7 +72,7 @@ export default function UnassignedDevices(props) {
         setDevices(devices.filter((el) => el.id !== row.id));
       }}
       data={devices}
-      title="Unassigned sensors"
+      title="Sensors"
     />
   );
 }

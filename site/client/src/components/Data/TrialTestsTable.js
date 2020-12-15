@@ -51,10 +51,9 @@ class TrialTestsTable extends Component {
         ) {
           console.log(
             this.props.location.state.fromDashboard,
-            this.props.location.state.lastTest,
             this.props.location.state
           );
-          this.filterTests(this.props.location.state.lastTest);
+          this.filterTests(this.props.tests[0].id);
           this.togglePopup();
         }
       });

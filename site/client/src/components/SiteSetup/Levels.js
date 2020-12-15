@@ -42,6 +42,18 @@ export default function Levels(props) {
     },
   ];
 
+  const validate = (data) => {
+    const entries = Object.entries(data);
+    let values = [];
+    entries.forEach((el) => {
+      if (el[0].includes("level")) {
+        console.log(el[1]);
+        values.push(el[1]);
+      }
+    });
+    return !values.some((el) => el === "");
+  };
+
   const updateLevel = async (updateData) => {
     let result = await axios({
       //Axios POST request
@@ -108,11 +120,13 @@ export default function Levels(props) {
         //   const index = oldData.tableData.id;
         //   dataUpdate[index] = newData;
         //   setData([...dataUpdate]);
-        updateLevel(newData).then((res) => {
-          console.log(res);
-          props.handleEditLevel(newData, oldData, "update");
-          resolve();
-        });
+        if (validate(newData))
+          updateLevel(newData).then((res) => {
+            console.log(res);
+            props.handleEditLevel(newData, oldData, "update");
+            resolve();
+          });
+        else reject();
       }),
     onRowDelete: (oldData) =>
       new Promise((resolve, reject) => {

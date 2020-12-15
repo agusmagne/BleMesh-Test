@@ -136,7 +136,7 @@ class LiveTestDevice {
     console.log("update device state:", status, this.result);
 
     con.query(updateStatusQuery, [status, this.id]).catch((err) => {
-      throw err;
+      console.log(err);
     });
   }
 

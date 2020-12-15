@@ -293,7 +293,7 @@ export default function LiveEmStatus(props) {
               setClickedGroup={setClickedLgtGroup}
             />
           </div>
-          <Devices level={clickedLevel} devices={devices} editable={false} />
+          {/* <Devices level={clickedLevel} devices={devices} editable={false} /> */}
         </div>
       ) : null}
     </div>

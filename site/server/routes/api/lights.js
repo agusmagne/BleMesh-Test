@@ -249,8 +249,8 @@ router.post("/move/:id", auth, (req, res) => {
 
 router.delete("/:id", auth, (req, res) => {
   con.query(deleteLight, req.params.id, (err) => {
-    if (err) res.sendStatus(400);
-    res.sendStatus(200);
+    if (err) console.log(err);
+    else res.sendStatus(200);
   });
 });
 

@@ -3,7 +3,7 @@ import NoDataIndication from "components/NoDataIndication/NoDataIndicationTable"
 import "./table.css";
 import MaterialTable from "material-table";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 export default function Buildings(props) {
   const history = useHistory();
@@ -28,6 +28,11 @@ export default function Buildings(props) {
       editable: "never",
     },
   ];
+
+  const validate = (data) => {
+    const values = Object.values(data);
+    return !values.some((el) => el.length < 3);
+  };
 
   const updateBuilding = async (updateData) => {
     let result = await axios({
@@ -83,42 +88,33 @@ export default function Buildings(props) {
   let editable = {
     onRowAdd: (newData) =>
       new Promise((resolve, reject) => {
-        setTimeout(() => {
-          //   setData([...data, newData]);
-          console.log(newData);
+        console.log(newData);
+        if (validate(newData))
           addBuilding(newData).then((res) => {
             console.log(res);
             props.handleEditBuilding(newData, {}, "add");
             resolve();
           });
-        }, 1000);
+        else reject();
       }),
     onRowUpdate: (newData, oldData) =>
       new Promise((resolve, reject) => {
-        //   const dataUpdate = [...data];
-        //   const index = oldData.tableData.id;
-        //   dataUpdate[index] = newData;
-        //   setData([...dataUpdate]);
-        updateBuilding(newData).then((res) => {
-          console.log(res);
-          props.handleEditBuilding(newData, oldData, "update");
+        if (validate(newData))
+          updateBuilding(newData).then((res) => {
+            console.log(res);
+            props.handleEditBuilding(newData, oldData, "update");
 
-          resolve();
-        });
-      }),
-    onRowDelete: (oldData) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          //   const dataDelete = [...data];
-          //   const index = oldData.tableData.id;
-          //   dataDelete.splice(index, 1);
-          //   setData([...dataDelete]);
-          deleteBuilding(oldData).then((res) => {
-            props.handleEditBuilding({}, oldData, "delete");
             resolve();
           });
-        }, 1000);
+        else reject();
       }),
+    // onRowDelete: (oldData) =>
+    //   new Promise((resolve, reject) => {
+    //     deleteBuilding(oldData).then((res) => {
+    //       props.handleEditBuilding({}, oldData, "delete");
+    //       resolve();
+    //     });
+    //   }),
   };
 
   let actions = [
@@ -128,7 +124,7 @@ export default function Buildings(props) {
       onClick: (event, rowData) => {
         history.push({
           pathname: "/admin/upload-csv",
-          state: { building: rowData },
+          state: {building: rowData, site: props.clickedSite},
         });
       },
     },
@@ -138,7 +134,7 @@ export default function Buildings(props) {
     actions = [];
     editable = {};
   }
-
+  console.log(props.buildings);
   return (
     <MaterialTable
       columns={columns}

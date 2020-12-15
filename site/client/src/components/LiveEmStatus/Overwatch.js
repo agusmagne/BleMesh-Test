@@ -22,6 +22,7 @@ export default function Overwatch(props) {
       })
       .then((response) => {
         if (response.data.length > 0) {
+          console.log(response.data);
           setLights(response.data);
           setResponse(true);
         } else {
@@ -41,6 +42,7 @@ export default function Overwatch(props) {
       })
       .then((response) => {
         if (response.data.length > 0) {
+          console.log(response.data);
           setSensors(response.data);
           setResponse(true);
         } else {

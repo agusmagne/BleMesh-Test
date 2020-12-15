@@ -7,7 +7,7 @@ const cors = require("cors");
 const con = require("../../database/db2");
 const auth = require("../../middleware/auth");
 const jwt = require("jsonwebtoken");
-const { add } = require("lodash");
+const {add} = require("lodash");
 
 const getSensorsByLevel = `SELECT s.id, s.parent_id, s.node_id, s.levels_id, s.is_assigned as sensor_is_assigned, 
                         s.fp_coordinates_left, s.fp_coordinates_bot, s.type as sensor_type, 
@@ -20,6 +20,18 @@ const getSensorsByLevel = `SELECT s.id, s.parent_id, s.node_id, s.levels_id, s.i
                                     GROUP BY id ) AS Bm
                         ON Bm.sensor_node_id = s.node_id
                         WHERE s.levels_id = ? AND s.is_assigned = 1
+                        GROUP BY s.id, lg.id`;
+const getAllSensorsByLevel = `SELECT s.id, s.parent_id, s.node_id, s.levels_id, s.is_assigned as sensor_is_assigned, 
+                        s.fp_coordinates_left, s.fp_coordinates_bot, s.type as sensor_type, 
+                        lg.device_id, lg.type, lg.status, lg.levels_id, lg.node_id as light_node_id,
+                        Bm.battery, Bm.ldr
+                        FROM sensors s
+                        LEFT JOIN lights lg ON lg.id = s.parent_id
+                        LEFT JOIN ( SELECT MAX(id), battery, ldr, sensor_node_id
+                                    FROM device_battery_ldr
+                                    GROUP BY id ) AS Bm
+                        ON Bm.sensor_node_id = s.node_id
+                        WHERE s.levels_id = ?
                         GROUP BY s.id, lg.id`;
 
 const getUnassignedSensors = `SELECT s.id, s.type as sensor_type, s.parent_id, s.node_id, s.levels_id, s.is_assigned as sensor_is_assigned, 
@@ -43,6 +55,13 @@ const assignSensor =
 const deleteSensor = "DELETE FROM sensors WHERE id = ?";
 
 router.get("/level/:level_id", auth, (req, res) => {
+  con.query(getSensorsByLevel, req.params.level_id, (err, rows) => {
+    if (err) res.sendStatus(400);
+    res.json(rows);
+  });
+});
+
+router.get("/level/all/:level_id", auth, (req, res) => {
   con.query(getSensorsByLevel, req.params.level_id, (err, rows) => {
     if (err) res.sendStatus(400);
     res.json(rows);

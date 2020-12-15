@@ -87,7 +87,7 @@ const dashboardRoutes = [
     icon: "eco",
     component: Energy,
     layout: "/admin",
-    access: 2,
+    access: 99,
     hidden: false,
   },
   {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import TrialTestsTable from "components/Data/TrialTestsTable";
@@ -22,8 +22,12 @@ export default class TrialTestsTableSelf extends Component {
       },
       url: global.BASE_URL + "/api/trialtests/usr/" + user,
     }).then((res) => {
+      let tests = [];
+      res.data.filter((test) => {
+        if (test.result !== "In Progress") tests.push(test);
+      });
       this.setState({
-        trialTests: res.data,
+        trialTests: tests,
       });
     });
     this.intervalTests = setInterval(() => {
@@ -40,7 +44,7 @@ export default class TrialTestsTableSelf extends Component {
           trialTests: res.data,
         });
       });
-    }, 30000);
+    }, 15000);
   }
 
   componentWillUnmount() {

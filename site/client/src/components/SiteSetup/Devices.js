@@ -52,6 +52,18 @@ export default function buildings(props) {
     },
   ];
 
+  const validate = (data) => {
+    const entries = Object.entries(data);
+    let values = [];
+    entries.forEach((el) => {
+      if (el[0].includes("level")) {
+        console.log(el[1]);
+        values.push(el[1]);
+      }
+    });
+    return !values.some((el) => el === "");
+  };
+
   const addEmpty = async (updateData) => {
     let result = await axios({
       //Axios POST request
@@ -148,11 +160,13 @@ export default function buildings(props) {
       }),
     onRowAdd: (newData) =>
       new Promise((resolve, reject) => {
-        addDevice(newData).then((res) => {
-          console.log(res);
-          props.handleEditDevice(newData, {}, "add");
-          resolve();
-        });
+        if (validate(newData))
+          addDevice(newData).then((res) => {
+            console.log(res);
+            props.handleEditDevice(newData, {}, "add");
+            resolve();
+          });
+        else reject();
       }),
     onRowUpdate: (newData, oldData) =>
       new Promise((resolve, reject) => {

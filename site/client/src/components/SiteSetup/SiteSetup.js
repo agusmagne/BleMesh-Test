@@ -1,4 +1,4 @@
-import { Fab, Icon, Tab, Tabs, Tooltip } from "@material-ui/core";
+import {Fab, Icon, Tab, Tabs, Tooltip} from "@material-ui/core";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import GridContainer from "components/Grid/GridContainer";
@@ -51,7 +51,7 @@ export default class SiteSetup extends React.Component {
         devices: [],
       });
       this.callBuildings(site).then((res) => {
-        this.setState({ clickedSite: site });
+        this.setState({clickedSite: site});
         setTimeout(() => {
           this.setState({
             buildings: res.data,
@@ -76,7 +76,7 @@ export default class SiteSetup extends React.Component {
         address: this.state.buildingAddress,
       },
     }).then((res) => {
-      this.refresh().then(() => this.setState({ createNewBuilding: false }));
+      this.refresh().then(() => this.setState({createNewBuilding: false}));
       console.log(res);
     });
   };
@@ -105,23 +105,23 @@ export default class SiteSetup extends React.Component {
   };
 
   handleNewBuilding = () => {
-    this.setState({ createNewBuilding: !this.state.createNewBuilding });
+    this.setState({createNewBuilding: !this.state.createNewBuilding});
   };
 
   handleNewLevel = () => {
-    this.setState({ createNewLevel: !this.state.createNewLevel });
+    this.setState({createNewLevel: !this.state.createNewLevel});
   };
 
   setBuildingName = (e) => {
-    this.setState({ buildingName: e.target.value });
+    this.setState({buildingName: e.target.value});
   };
 
   setBuildingAddress = (e) => {
-    this.setState({ buildingAddress: e.target.value });
+    this.setState({buildingAddress: e.target.value});
   };
 
   setLevelName = (e) => {
-    this.setState({ levelName: e.target.value });
+    this.setState({levelName: e.target.value});
   };
 
   /* API CALLS */
@@ -207,7 +207,7 @@ export default class SiteSetup extends React.Component {
     });
     this.callLevels(row.buildings_id).then((res) => {
       console.log(res);
-      this.setState({ levels: res.data, backDisabled: false });
+      this.setState({levels: res.data, backDisabled: false});
     });
   };
 
@@ -217,11 +217,11 @@ export default class SiteSetup extends React.Component {
 
     this.callDevices(row.id).then((res) => {
       console.log(res);
-      this.setState({ devices: res.data, backDisabled: false });
+      this.setState({devices: res.data, backDisabled: false});
     });
     this.callSensors(row.id).then((res) => {
       console.log(res);
-      this.setState({ sensors: res.data });
+      this.setState({sensors: res.data});
       this.setState({
         step: 3,
         clickedLevel: row.id,
@@ -234,21 +234,21 @@ export default class SiteSetup extends React.Component {
     console.log(newData, action);
     switch (action) {
       case "add":
-        this.setState({ buildings: [...this.state.buildings, newData] });
+        this.setState({buildings: [...this.state.buildings, newData]});
         break;
 
       case "update":
         const dataUpdate = [...this.state.buildings];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
-        this.setState({ buildings: [...dataUpdate] });
+        this.setState({buildings: [...dataUpdate]});
         break;
 
       case "delete":
         const dataDelete = [...this.state.buildings];
         const indexDel = oldData.tableData.id;
         dataDelete.splice(indexDel, 1);
-        this.setState({ buildings: [...dataDelete] });
+        this.setState({buildings: [...dataDelete]});
         break;
     }
     this.refresh();
@@ -258,21 +258,23 @@ export default class SiteSetup extends React.Component {
     switch (action) {
       case "add":
         newData.buildings_id = this.state.clickedBuilding;
-        this.setState({ levels: [...this.state.levels, newData] });
+        this.setState({levels: [...this.state.levels, newData]});
         break;
 
       case "update":
         const dataUpdate = [...this.state.levels];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
-        this.setState({ levels: [...dataUpdate] });
+        this.setState({levels: [...dataUpdate]});
         break;
 
       case "delete":
         const dataDelete = [...this.state.levels];
         const indexDel = oldData.tableData.id;
         dataDelete.splice(indexDel, 1);
-        this.setState({ levels: [...dataDelete] });
+        this.setState({levels: [...dataDelete]});
+        break;
+      default:
         break;
     }
     this.refresh();
@@ -282,21 +284,21 @@ export default class SiteSetup extends React.Component {
     switch (action) {
       case "add":
         newData.levels_id = this.state.clickedLevel;
-        this.setState({ devices: [...this.state.devices, newData] });
+        this.setState({devices: [...this.state.devices, newData]});
         break;
 
       case "update":
         const dataUpdate = [...this.state.devices];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
-        this.setState({ devices: [...dataUpdate] });
+        this.setState({devices: [...dataUpdate]});
         break;
 
       case "delete":
         const dataDelete = [...this.state.devices];
         const indexDel = oldData.tableData.id;
         dataDelete.splice(indexDel, 1);
-        this.setState({ devices: [...dataDelete] });
+        this.setState({devices: [...dataDelete]});
         break;
     }
     this.refresh();
@@ -305,21 +307,21 @@ export default class SiteSetup extends React.Component {
   handleEditSensor = (newData, oldData, action) => {
     switch (action) {
       case "add":
-        this.setState({ sensors: [...this.state.sensors, newData] });
+        this.setState({sensors: [...this.state.sensors, newData]});
         break;
 
       case "update":
         const dataUpdate = [...this.state.sensors];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
-        this.setState({ sensors: [...dataUpdate] });
+        this.setState({sensors: [...dataUpdate]});
         break;
 
       case "delete":
         const dataDelete = [...this.state.sensors];
         const indexDel = oldData.tableData.id;
         dataDelete.splice(indexDel, 1);
-        this.setState({ sensors: [...dataDelete] });
+        this.setState({sensors: [...dataDelete]});
         break;
     }
     this.refresh();
@@ -334,7 +336,7 @@ export default class SiteSetup extends React.Component {
       const index = el.newData.tableData.id;
       dataUpdate[index] = el.newData;
     });
-    this.setState({ devices: [...dataUpdate] });
+    this.setState({devices: [...dataUpdate]});
     this.refresh();
   };
 
@@ -364,23 +366,24 @@ export default class SiteSetup extends React.Component {
 
   refresh = async () => {
     let promise = new Promise((resolve, reject) => {
-      this.callSites().then((res) => {
-        const sites_id = res.data[0].sites_id;
+      this.callSites().then((sites) => {
         this.setState({
-          sites: res.data,
-          clickedSite: sites_id,
-          siteName: res.data[0].name,
+          sites: sites.data,
         });
-        this.callBuildings(sites_id).then((res) => {
-          this.setState({ buildings: res.data });
-        });
-        this.callLevels(this.state.clickedBuilding).then((res) => {
-          this.setState({
-            levels: res.data,
+        this.callBuildings(this.state.clickedSite).then((buildings) => {
+          this.setState({buildings: buildings.data});
+          this.callLevels(this.state.clickedBuilding).then((lvls) => {
+            this.setState({
+              levels: lvls.data,
+            });
+            this.callDevices(this.state.clickedLevel).then((devices) => {
+              this.setState({devices: devices.data});
+              resolve("");
+            });
           });
-          resolve("");
         });
-        this.setState({ tabsDisabled: false });
+
+        this.setState({tabsDisabled: false});
       });
     });
     let result = await promise;
@@ -396,12 +399,12 @@ export default class SiteSetup extends React.Component {
         siteName: res.data[0].name,
       });
       this.callBuildings(sites_id).then((res) => {
-        this.setState({ buildings: res.data });
+        this.setState({buildings: res.data});
       });
       this.callLevels(sites_id).then((res) => {
-        this.setState({ levels: res.data });
+        this.setState({levels: res.data});
       });
-      this.setState({ tabsDisabled: false });
+      this.setState({tabsDisabled: false});
     });
   }
 
@@ -421,7 +424,7 @@ export default class SiteSetup extends React.Component {
     } = this.state;
 
     return (
-      <div style={{ margin: "5px" }}>
+      <div style={{margin: "5px"}}>
         {/* TABS */}
         <GridItem xs={12}>
           {this.state.clickedSite ? (
@@ -452,12 +455,12 @@ export default class SiteSetup extends React.Component {
 
         <GridContainer
           justify="center"
-          style={{ margin: "5px", textAlign: "center" }}
+          style={{margin: "5px", textAlign: "center"}}
         >
           {/* TABS */}
           <GridItem xs={12}>
             {step > 1 ? (
-              <div style={{ margin: "20px" }}>
+              <div style={{margin: "20px"}}>
                 <EditBuilding building={this.state.clickedBuildingDetails} />
 
                 {step > 2 ? (
@@ -471,7 +474,7 @@ export default class SiteSetup extends React.Component {
           </GridItem>
         </GridContainer>
         {/* BACK BUTTON */}
-        <div style={{ margin: "20px", marginLeft: "15px" }}>
+        <div style={{margin: "20px", marginLeft: "15px"}}>
           <GridContainer>
             <GridItem xs={1}>
               <Tooltip title="Back" aria-label="add">
@@ -482,15 +485,15 @@ export default class SiteSetup extends React.Component {
                     variant="round"
                     onClick={() => {
                       if (this.state.step > 1) {
-                        this.setState({ step: step - 1 }, () => {
+                        this.setState({step: step - 1}, () => {
                           if (this.state.step <= 1)
-                            this.setState({ backDisabled: true });
-                          else this.setState({ backDisabled: false });
+                            this.setState({backDisabled: true});
+                          else this.setState({backDisabled: false});
                         });
-                      } else this.setState({ backDisabled: true });
+                      } else this.setState({backDisabled: true});
                     }}
                   >
-                    <Icon style={{ transform: "rotate(-90deg)" }}>
+                    <Icon style={{transform: "rotate(-90deg)"}}>
                       navigation
                     </Icon>
                   </Fab>
