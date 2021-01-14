@@ -1,3 +1,0 @@
-exports.Init = () => {
-  return "blabla";
-};
