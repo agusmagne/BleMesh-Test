@@ -19,6 +19,7 @@ class ScannerRepository @Inject constructor(
     private val meshManagerApi: MeshManagerApi
 ) {
 
+
     val TAG = ScannerRepository::class.java.simpleName
     private val logSession = Logger.newSession(application, "key", "ScannerRepository")
 
